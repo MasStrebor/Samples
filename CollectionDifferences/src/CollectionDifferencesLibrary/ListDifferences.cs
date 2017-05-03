@@ -10,6 +10,19 @@ namespace CollectionDifferencesLibrary
     /// <typeparam name="T">The type of each list item.</typeparam>
     public class ListDifferences<T> : IEquatable<ListDifferences<T>>
     {
+        private readonly static ListDifferences<T> s_Empty = new ListDifferences<T>(Enumerable.Empty<T>(), Enumerable.Empty<T>(), Enumerable.Empty<T>());
+
+        /// <summary>
+        /// Gets the empty instance of the <see cref="ListDifferences{T}"/> class.
+        /// </summary>
+        public static ListDifferences<T> Empty
+        {
+            get
+            {
+                return s_Empty;
+            }
+        }
+
         /// <summary>
         /// Gets the list of new items.
         /// </summary>

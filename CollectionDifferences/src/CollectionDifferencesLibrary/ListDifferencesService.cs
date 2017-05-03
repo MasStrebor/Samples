@@ -4,22 +4,18 @@ using System.Linq;
 
 namespace CollectionDifferencesLibrary
 {
-    public class ListDifferencesService
+    /// <summary>
+    /// Provides the service to compare two lists of a specified type to find out which items are new, dirty and deleted.
+    /// </summary>
+    internal static class ListDifferencesService
     {
-        /// <summary>
-        /// Initialises a new instance of the <see cref="ListDifferencesService"/> class.
-        /// </summary>
-        public ListDifferencesService()
-        {
-        }
-
         /// <summary>
         /// Collects the new, updated, and deleted items from comparing the specified lists.
         /// </summary>
         /// <typeparam name="T">The type of item within each list.</typeparam>
         /// <param name="originalList">The original list.</param>
         /// <param name="newList">The new list of merge any changes.</param>
-        public ListDifferences<T> ProcessDifferences<T>(IList<T> originalList, IList<T> newList)
+        internal static ListDifferences<T> ProcessDifferences<T>(IList<T> originalList, IList<T> newList)
         {
             if (originalList == null)
             {
@@ -42,6 +38,7 @@ namespace CollectionDifferencesLibrary
                 int newItemIndexInOriginalList = originalList.IndexOf(newItem);
                 if (newItemIndexInOriginalList > -1)
                 {
+                    //Ensure the new item does not get deleted as it existed in the original list.
                     deletedList.Remove(newItem);
 
                     if (newItemIndex != newItemIndexInOriginalList || !Equals(originalList[newItemIndexInOriginalList], newItem))

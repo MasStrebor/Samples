@@ -8,11 +8,9 @@ namespace CollectionDifferencesLibrary.Tests
     public class ListDifferencesServiceTests
     {
         [TestMethod]
-        public void MethodProcessDifferences_SupplySameList_NoDifferences()
+        public void MethodComapre_SupplySameList_NoDifferences()
         {
-            ListDifferencesService testObject = new ListDifferencesService();
-
-            List<int> originalListTestData = new List<int>
+            List<int> testObject = new List<int>
             {
                 1,
                 2,
@@ -28,22 +26,52 @@ namespace CollectionDifferencesLibrary.Tests
                 4
             };
 
-            ListDifferences<int> expectedResult = new ListDifferences<int>(Enumerable.Empty<int>(), Enumerable.Empty<int>(), Enumerable.Empty<int>());
+            ListDifferences<int> expectedResult = ListDifferences<int>.Empty;
 
-            ListDifferences<int> actualResult = testObject.ProcessDifferences<int>(originalListTestData, newListTestData);
+            ListDifferences<int> actualResult = testObject.Compare<int>(newListTestData);
 
             Assert.IsNotNull(actualResult);
             Assert.AreEqual(expectedResult, actualResult);
         }
 
         [TestMethod]
-        public void MethodProcessDifferences_SupplyNewEntries_ResultContainsOnlyNewEntries()
+        public void MethodCompare_UseEmptyOriginalList_ResultContainsOnlyNewEntries()
+        {
+            const int expectedNewListCount = 4;
+
+            List<int> testObject = new List<int>();
+
+            List<int> newListTestData = new List<int>
+            {
+                1,
+                2,
+                3,
+                4
+            };
+
+            List<int> expectedNewList = new List<int>
+            {
+                1,
+                2,
+                3,
+                4
+            };
+
+            ListDifferences<int> expectedResult = new ListDifferences<int>(expectedNewList, Enumerable.Empty<int>(), Enumerable.Empty<int>());
+
+            ListDifferences<int> actualResult = testObject.Compare<int>(newListTestData);
+
+            Assert.IsNotNull(actualResult);
+            Assert.AreEqual(expectedResult, actualResult);
+            Assert.AreEqual(expectedNewListCount, actualResult.New.Count());
+        }
+
+        [TestMethod]
+        public void MethodCompare_SupplyNewEntries_ResultContainsOnlyNewEntries()
         {
             const int expectedNewListCount = 2;
 
-            ListDifferencesService testObject = new ListDifferencesService();
-
-            List<int> originalListTestData = new List<int>
+            List<int> testObject = new List<int>
             {
                 1,
                 2
@@ -65,7 +93,7 @@ namespace CollectionDifferencesLibrary.Tests
 
             ListDifferences<int> expectedResult = new ListDifferences<int>(expectedNewList, Enumerable.Empty<int>(), Enumerable.Empty<int>());
 
-            ListDifferences<int> actualResult = testObject.ProcessDifferences<int>(originalListTestData, newListTestData);
+            ListDifferences<int> actualResult = testObject.Compare<int>(newListTestData);
 
             Assert.IsNotNull(actualResult);
             Assert.AreEqual(expectedResult, actualResult);
@@ -73,13 +101,11 @@ namespace CollectionDifferencesLibrary.Tests
         }
 
         [TestMethod]
-        public void MethodProcessDifferences_SupplyAlteredList_ResultContainsOnlyUpdatedEntries()
+        public void MethodCompare_SupplyAlteredList_ResultContainsOnlyUpdatedEntries()
         {
             const int expectedUpdatedListCount = 2;
 
-            ListDifferencesService testObject = new ListDifferencesService();
-
-            List<int> originalListTestData = new List<int>
+            List<int> testObject = new List<int>
             {
                 1,
                 2,
@@ -103,7 +129,7 @@ namespace CollectionDifferencesLibrary.Tests
 
             ListDifferences<int> expectedResult = new ListDifferences<int>(Enumerable.Empty<int>(), expectedUpdatedList, Enumerable.Empty<int>());
 
-            ListDifferences<int> actualResult = testObject.ProcessDifferences<int>(originalListTestData, newListTestData);
+            ListDifferences<int> actualResult = testObject.Compare<int>(newListTestData);
 
             Assert.IsNotNull(actualResult);
             Assert.AreEqual(expectedResult, actualResult);
@@ -111,13 +137,11 @@ namespace CollectionDifferencesLibrary.Tests
         }
 
         [TestMethod]
-        public void MethodProcessDifferences_SupplyEmptyList_ResultContainsOnlyDeletedEntries()
+        public void MethodCompare_SupplyEmptyList_ResultContainsOnlyDeletedEntries()
         {
             const int expectedDeletedListCount = 2;
 
-            ListDifferencesService testObject = new ListDifferencesService();
-
-            List<int> originalListTestData = new List<int>
+            List<int> testObject = new List<int>
             {
                 1,
                 2
@@ -133,7 +157,7 @@ namespace CollectionDifferencesLibrary.Tests
 
             ListDifferences<int> expectedResult = new ListDifferences<int>(Enumerable.Empty<int>(), Enumerable.Empty<int>(), expectedDeletedList);
 
-            ListDifferences<int> actualResult = testObject.ProcessDifferences<int>(originalListTestData, newListTestData);
+            ListDifferences<int> actualResult = testObject.Compare<int>(newListTestData);
 
             Assert.IsNotNull(actualResult);
             Assert.AreEqual(expectedResult, actualResult);
