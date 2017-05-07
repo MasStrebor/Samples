@@ -5,7 +5,7 @@ using System.Linq;
 namespace CollectionDifferencesLibrary.Tests
 {
     [TestClass]
-    public class ListDifferencesServiceTests
+    public class ListExtensionsTests
     {
         [TestMethod]
         public void MethodComapre_SupplySameList_NoDifferences()
@@ -25,6 +25,7 @@ namespace CollectionDifferencesLibrary.Tests
                 3,
                 4
             };
+            
 
             ListDifferences<int> expectedResult = ListDifferences<int>.Empty;
 

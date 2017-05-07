@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CollectionDifferencesLibrary
 {
@@ -27,7 +28,43 @@ namespace CollectionDifferencesLibrary
                 throw new ArgumentNullException(nameof(newList));
             }
 
-            return ListDifferencesService.ProcessDifferences<T>(originalList, newList);
+
+            if (originalList == null)
+            {
+                throw new ArgumentNullException(nameof(originalList));
+            }
+
+            if (newList == null)
+            {
+                throw new ArgumentNullException(nameof(newList));
+            }
+
+            IList<T> newItemList = new List<T>();
+            IList<T> updatedList = new List<T>();
+            IList<T> deletedList = originalList.ToList();
+
+            for (int newItemIndex = 0; newItemIndex < newList.Count; newItemIndex++)
+            {
+                T newItem = newList[newItemIndex];
+
+                int newItemIndexInOriginalList = originalList.IndexOf(newItem);
+                if (newItemIndexInOriginalList > -1)
+                {
+                    //Ensure the new item does not get deleted as it existed in the original list.
+                    deletedList.Remove(newItem);
+
+                    if (newItemIndex != newItemIndexInOriginalList || !Equals(originalList[newItemIndexInOriginalList], newItem))
+                    {
+                        updatedList.Add(newItem);
+                    }
+                }
+                else
+                {
+                    newItemList.Add(newItem);
+                }
+            }
+
+            return new ListDifferences<T>(newItemList, updatedList, deletedList);
         }
     }
 }
