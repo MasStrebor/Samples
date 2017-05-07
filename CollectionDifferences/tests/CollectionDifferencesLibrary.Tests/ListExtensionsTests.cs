@@ -25,7 +25,6 @@ namespace CollectionDifferencesLibrary.Tests
                 3,
                 4
             };
-            
 
             ListDifferences<int> expectedResult = ListDifferences<int>.Empty;
 
@@ -138,7 +137,7 @@ namespace CollectionDifferencesLibrary.Tests
         }
 
         [TestMethod]
-        public void MethodCompare_SupplyEmptyList_ResultContainsOnlyDeletedEntries()
+        public void MethodCompare_SupplyEmptyNewList_ResultContainsOnlyDeletedEntries()
         {
             const int expectedDeletedListCount = 2;
 
@@ -162,6 +161,54 @@ namespace CollectionDifferencesLibrary.Tests
 
             Assert.IsNotNull(actualResult);
             Assert.AreEqual(expectedResult, actualResult);
+            Assert.AreEqual(expectedDeletedListCount, actualResult.Deleted.Count());
+        }
+
+        [TestMethod]
+        public void MethodCompare_SupplyNewUpdatedAndDeletedList_ContainsNewUpdatedAndDeletedEntries()
+        {
+            const int expectedNewListCount = 1;
+            const int expectedUpdatedListCount = 1;
+            const int expectedDeletedListCount = 1;
+
+            List<int> testObject = new List<int>
+            {
+                1,
+                2,
+                3
+            };
+
+            List<int> newListTestData = new List<int>
+            {
+                1,
+                3,
+                4
+            };
+
+            List<int> expectedNewList = new List<int>
+            {
+                4
+            };
+
+            List<int> expectedUpdatedList = new List<int>
+            {
+                3
+            };
+
+            List<int> expectedDeletedList = new List<int>
+            {
+                2
+            };
+
+            ListDifferences<int> expectedResult = new ListDifferences<int>(expectedNewList, expectedUpdatedList, expectedDeletedList);
+
+            ListDifferences<int> actualResult = testObject.Compare<int>(newListTestData);
+
+            Assert.IsNotNull(actualResult);
+            Assert.AreEqual(expectedResult, actualResult);
+
+            Assert.AreEqual(expectedNewListCount, actualResult.New.Count());
+            Assert.AreEqual(expectedUpdatedListCount, actualResult.Updated.Count());
             Assert.AreEqual(expectedDeletedListCount, actualResult.Deleted.Count());
         }
     }
