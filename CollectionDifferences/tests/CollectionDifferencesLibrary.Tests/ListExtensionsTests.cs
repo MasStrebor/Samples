@@ -28,7 +28,7 @@ namespace CollectionDifferencesLibrary.Tests
 
             ListDifferences<int> expectedResult = ListDifferences<int>.Empty;
 
-            ListDifferences<int> actualResult = testObject.Compare<int>(newListTestData);
+            ListDifferences<int> actualResult = testObject.Compare(newListTestData);
 
             Assert.IsNotNull(actualResult);
             Assert.AreEqual(expectedResult, actualResult);
@@ -129,7 +129,13 @@ namespace CollectionDifferencesLibrary.Tests
 
             ListDifferences<int> expectedResult = new ListDifferences<int>(Enumerable.Empty<int>(), expectedUpdatedList, Enumerable.Empty<int>());
 
-            ListDifferences<int> actualResult = testObject.Compare<int>(newListTestData);
+            ListDifferences<int> actualResult = testObject.Compare(newListTestData, (item, newItem) => Equals(item, newItem), (item, newItem) =>
+            {
+                int originalIndex = testObject.IndexOf(newItem);
+                int newIndex = newListTestData.IndexOf(newItem);
+
+                return Equals(originalIndex, newIndex);
+            });
 
             Assert.IsNotNull(actualResult);
             Assert.AreEqual(expectedResult, actualResult);
@@ -202,7 +208,13 @@ namespace CollectionDifferencesLibrary.Tests
 
             ListDifferences<int> expectedResult = new ListDifferences<int>(expectedNewList, expectedUpdatedList, expectedDeletedList);
 
-            ListDifferences<int> actualResult = testObject.Compare<int>(newListTestData);
+            ListDifferences<int> actualResult = testObject.Compare(newListTestData, (item, newItem) => Equals(item, newItem), (item, newItem) =>
+            {
+                int originalIndex = testObject.IndexOf(newItem);
+                int newIndex = newListTestData.IndexOf(newItem);
+
+                return Equals(originalIndex, newIndex);
+            });
 
             Assert.IsNotNull(actualResult);
             Assert.AreEqual(expectedResult, actualResult);
